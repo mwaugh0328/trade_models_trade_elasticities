@@ -6,14 +6,14 @@ sig_error = 0.0;
 theta = 1./exp(theta(1));
 
 if flag == 1
-    load trade_grav_est_30.mat
+    load('../../data/trade_grav_est_30.mat')
 else
     load trade_grav_fake.mat
 end
 
 % [~, tau, ssd, ~]=gravregasym_sim(tradeshare,distance,b,theta);
 
-[~, tau, ssd, ~]=gravregasym_logd(tradeshare,distance,b,theta);
+[~, tau, ssd, ~]=gravregasym_logd(tradeshare,grav_distance,b,theta);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % % [~, tau, ssd, err_var]=gravregimpt_sim(tradeshare,distance,b,theta);
@@ -39,7 +39,7 @@ nmoments = 1;
 Ncntry = length(ssd);
 Nobvs = Ncntry.^2 - Ncntry;
 
-d_hat = log(distance(eye(Ncntry)~=1));
+d_hat = log(grav_distance(eye(Ncntry)~=1));
 
 boot_L = 617429;
 
@@ -59,7 +59,7 @@ second_part = zeros(nmoments,nmoments,Nruns);
 if Nruns ~= 1
     parfor runs = 1:Nruns
 
-    [final_price] = sim_trade_pattern_ek_ponly_mex(exp(ssd),tau,1./theta,sigma,runs+boot);
+    [final_price] = sim_trade_pattern_ek_ponly(exp(ssd),tau,1./theta,sigma,runs+boot);
 
     
     [record(:,runs,:)]  = gen_moments(final_price,d_hat,sig_error,Nsubs,sample,nmoments,runs+boot);
@@ -70,7 +70,7 @@ else
 
         runs = 1;
         
-        [final_price] = sim_trade_pattern_ek_ponly_mex(exp(ssd),tau,1./theta,sigma,runs+boot);
+        [final_price] = sim_trade_pattern_ek_ponly(exp(ssd),tau,1./theta,sigma,runs+boot);
         
         [record(:,runs,:)]  = gen_moments(final_price,d_hat,sig_error,Nsubs,sample,nmoments,runs+boot);
 

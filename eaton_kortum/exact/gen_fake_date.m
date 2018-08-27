@@ -3,8 +3,8 @@ function loss = gen_fake_date(theta,sample,boot)
 sig_error = 0;
 theta = 1./theta(1);
 
-load estimation_mat_30.mat
-[~, tau, ssd, err_var]=gravregasym_logd(tradeshare,distance,b,theta);
+load('../../data/estimation_mat_30.mat')
+[~, tau, ssd, err_var]=gravregasym_logd(tradeshare,grav_distance,b,theta);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -22,11 +22,11 @@ load estimation_mat_30.mat
 
 sigma = 1.5;
  
-[mhat, final_price] = sim_trade_pattern_ek_mex(exp(ssd),tau,1./theta,sigma,boot);
+[mhat, final_price] = sim_trade_pattern_ek(exp(ssd),tau,1./theta,sigma,boot);
     
 
 [Ngoods,~] = size(final_price);
-rng(12071940+boot)
+rng(12071940+boot,'twister')
 
 keep = randi(Ngoods,sample,1);
 
@@ -40,7 +40,7 @@ istraded = ones(1,length(pmat_30));
 
 save fake_data pmat_30 tradeshare istraded
 
-save trade_grav_fake tradeshare b distance 
+save trade_grav_fake tradeshare b grav_distance 
 
 loss = 1;
         

@@ -22,7 +22,7 @@ for sub_runs = 1:Nsubs
         
 %         m = trade_add_error(mhat, err_var,007+sub_runs+boot);
     
-        moments(:,sub_runs,:) = thetaest_est_mod_D_exact_mex(final_price_tilde, d_hat,sig_error,Nsubs+code);
+        moments(:,sub_runs,:) = thetaest_est_mod_D(final_price_tilde, d_hat,sig_error,Nsubs+code);
         
         
 %         moments(:,sub_runs,:) = thetaest_est_mod_over(final_price_tilde, m, theta);

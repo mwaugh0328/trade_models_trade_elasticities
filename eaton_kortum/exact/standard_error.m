@@ -4,7 +4,7 @@ load ek_results
 Nsims = 500;
 results = zeros(Nsims,2);
 
-matlabpool open
+
 
 for xxx = 1:Nsims
     
@@ -16,4 +16,3 @@ for xxx = 1:Nsims
     
 end
 
-matlabpool close
