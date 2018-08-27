@@ -83,8 +83,6 @@ end
 % 
 s_moments = reshape(nanmean(record,2),Nobvs,nmoments);
 
-
-
 m1 = mtwo(:,1);
 % m2 = (mtwo(:,1)-mean(m1)).^2;
 % m3 = mtwo(:,2);

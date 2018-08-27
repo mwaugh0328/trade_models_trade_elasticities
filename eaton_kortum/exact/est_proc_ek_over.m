@@ -1,9 +1,3 @@
-% This is a program to estimate theta, by Michael Waugh and Ina Simonovska
-% for the paper The Elasticity of Trade: Estimates and Evidence. 08/03/12
-%
-% Note this code computes the estimates when the estimation is
-% overidentified using the first and second max
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Step 1 Compute Data moments of interest. 
 % Here we will just compute the data moments for you as there are issues
