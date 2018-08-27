@@ -4,7 +4,7 @@ This repository contains selected replication files for Simonovska, Waugh "Trade
 
 - [eaton_kortum](https://github.com/mwaugh0328/trade_models_trade_elasticities/tree/master/eaton_kortum/) contains code to estimate the trade elasticity for the Eaton and Kortum model. Several specifications are included: Exactly identified and with measurement error in prices.
 
-- melitz_model: Todo
+- [melitz_model](https://github.com/mwaugh0328/trade_models_trade_elasticities/tree/master/melitz): Contains code to estimate the trade elasticity for the Melitz model. Several specifications are included: Exactly identified and with measurement error in prices.
 
 - bejk_model: Todo
 
