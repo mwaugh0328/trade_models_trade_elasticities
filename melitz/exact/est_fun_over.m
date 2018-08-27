@@ -2,19 +2,18 @@ function loss = est_fun_over(theta,mtwo,sample,Nruns,Nsubs,boot,flag)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This data set has the gravity data and the trade share matrix. 
 
-sig_error = max(theta(2),0);
+sig_error = 0.0;
 theta = 1./exp(theta(1));
 
 if flag == 1
     load('../../data/trade_grav_est_30.mat')
-    load trade_grav_est_30.mat
 else
     load trade_grav_fake.mat
 end
 
 % [~, tau, ssd, ~]=gravregasym_sim(tradeshare,distance,b,theta);
 
-[~, tau, ssd, ~]=gravregasym_logd(tradeshare,distance,b,theta);
+[~, tau, ssd, ~]=gravregasym_logd(tradeshare,grav_distance,b,theta);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % % [~, tau, ssd, err_var]=gravregimpt_sim(tradeshare,distance,b,theta);
@@ -36,11 +35,11 @@ end
 
 sigma = 1.5;
 [ndata, nmoments] = size(mtwo);
-nmoments = 3;
+nmoments = 1;
 Ncntry = length(ssd);
 Nobvs = Ncntry.^2 - Ncntry;
 
-d_hat = log(distance(eye(Ncntry)~=1));
+d_hat = log(grav_distance(eye(Ncntry)~=1));
 
 boot_L = 617429;
 
@@ -59,8 +58,8 @@ second_part = zeros(nmoments,nmoments,Nruns);
  
 if Nruns ~= 1
     parfor runs = 1:Nruns
-
-    [final_price] = sim_trade_pattern_ek_ponly_mex(exp(ssd),tau,1./theta,sigma,runs+boot);
+    [final_price] = sim_trade_pattern_mel_U_ponly(exp(ssd),tau,1./theta,sigma,runs+boot);
+    
 
     
     [record(:,runs,:)]  = gen_moments(final_price,d_hat,sig_error,Nsubs,sample,nmoments,runs+boot);
@@ -71,7 +70,7 @@ else
 
         runs = 1;
         
-        [final_price] = sim_trade_pattern_ek_ponly_mex(exp(ssd),tau,1./theta,sigma,runs+boot);
+        [final_price] = sim_trade_pattern_mel_U_ponly(exp(ssd),tau,1./theta,sigma,runs+boot);
         
         [record(:,runs,:)]  = gen_moments(final_price,d_hat,sig_error,Nsubs,sample,nmoments,runs+boot);
 
@@ -84,32 +83,29 @@ end
 % 
 s_moments = reshape(nanmean(record,2),Nobvs,nmoments);
 
-
-
 m1 = mtwo(:,1);
 % m2 = (mtwo(:,1)-mean(m1)).^2;
-m3 = mtwo(:,2);
+% m3 = mtwo(:,2);
 % m4 = mtwo(:,3);
 % % m4 = (mtwo(:,2)-mean(m3)).^2;
-m5 = (mtwo(:,1)-mean(m1)).*(d_hat-mean(d_hat));
+% m5 = (mtwo(:,1)-mean(m1)).*(d_hat-mean(d_hat));
 % m6 = (mtwo(:,2)-mean(m3)).*(d_hat-mean(d_hat));
 % m3 = mone - ((-1./theta).*mtwo(:,3));
 % m4 = mone - ((-1./theta).*mtwo(:,4));
 
-d_moments = [m1,m3,m5];
+d_moments = [m1];
 
 y_theta = mean(d_moments-s_moments)';
 
 % second_part = (1./Nruns).*sum(second_part,3);
-W = eye(nmoments);
-% loss = y_theta'*y_theta;
-
 % W = cov(d_moments-s_moments);
-loss = y_theta'*(W^-1)*y_theta;
+% W = eye(nmoments);
+loss = y_theta'*y_theta;
+
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 % % if Nruns ~= 1
-%     
+%     loss = y_theta'*(W^-1)*y_theta;
 % else
 %     loss = y_theta'*y_theta;
 % end
